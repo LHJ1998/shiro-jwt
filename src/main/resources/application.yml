@@ -1,0 +1,43 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /v1/api
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/study?useSSL=false
+    username: root
+    password: root
+    druid:
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+      max-wait: 60000
+      time-between-eviction-runs-millis: 60000
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+      web-stat-filter:
+        enabled: true
+        url-pattern: "/*"
+        exclusions: "*.js,*.gif,*.jpg,*.bmp,*.png,*.css,*.ico,/druid/*"
+      stat-view-servlet:
+        url-pattern: "/druid/*"
+        allow: localhost,127.0.0.1
+        reset-enable: false
+        login-username: root
+        login-password: root
+
+shiro:
+  salt: aSBsb3ZlIHlvdQ==
+  iteration: 5
+
+jwt:
+  expire: 300000
+
+mybatis:
+  type-aliases-package: com.lhj.shiro.jwt.pojo
+  mapper-locations: classpath:dao/*.xml

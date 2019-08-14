@@ -91,6 +91,7 @@ public class JWTUtil {
             return token;
         } catch (JWTDecodeException e1){
             log.error("error on decode jwtToken, error message: " + e1.getMessage());
+            return null;
         }
     }
 

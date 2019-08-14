@@ -1,10 +1,13 @@
 package com.lhj.shiro.jwt.component;
 
 import com.auth0.jwt.exceptions.TokenExpiredException;
+import com.lhj.shiro.jwt.config.ShiroProperties;
+import com.lhj.shiro.jwt.utils.SpringContextUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
 import org.springframework.http.HttpStatus;
-import org.springframework.util.StringUtils;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.ServletRequest;
@@ -19,15 +22,14 @@ import java.util.List;
 /**
  * 过滤器处理流程
  * preHandle->isAccessAllowed->isLoginAttempt->executeLogin
+ * @author LHJ
  */
 @Slf4j
 public class JWTFilter extends BasicHttpAuthenticationFilter {
 
     private final String AUTHORIZATION_HEADER = "Authorization";
 
-    private final List<String> anon = new ArrayList<>(
-            Arrays.asList("/v1/api/user/login", "/v1/api/user/register"
-                    , "/v1/api/401"));
+    private AntPathMatcher pathMatcher = new AntPathMatcher();
 
     /**
      * 验证用户是否需要进行身份验证
@@ -58,9 +60,17 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
     @Override
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
         HttpServletRequest req = (HttpServletRequest) request;
-        if(getSubject(request, response).isAuthenticated()
-                || anon.contains(req.getRequestURI())){
-            //访问位置在匿名区或者以通过认证
+        ShiroProperties shiroProperties = SpringContextUtil.getBean(ShiroProperties.class);
+        //分割字符串过程中会按照每个分隔符进行分割，不忽略任何空白项
+        String[] anonUrls = StringUtils.splitByWholeSeparatorPreserveAllTokens(shiroProperties.getAnonUrl(), ",");
+        //如果访问的路径在匿名区，允许访问
+        for(String url : anonUrls){
+            if(pathMatcher.match(url, req.getRequestURI())){
+                return true;
+            }
+        }
+        //已通过认证的，允许访问
+        if(getSubject(request, response).isAuthenticated()){
             return true;
         }
         if(isLoginAttempt(request, response)){

@@ -2,6 +2,7 @@ package com.lhj.shiro.jwt.component;
 
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.lhj.shiro.jwt.config.ShiroProperties;
+import com.lhj.shiro.jwt.utils.EncryptUtil;
 import com.lhj.shiro.jwt.utils.SpringContextUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -48,9 +49,10 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
     @Override
     protected boolean executeLogin(ServletRequest request, ServletResponse response) throws Exception {
         HttpServletRequest req = (HttpServletRequest) request;
+        System.out.println(req.getRequestURI() + " need authentication ...");
         String token = req.getHeader(AUTHORIZATION_HEADER);
         //封装为JWTToken
-        JWTToken jwtToken = new JWTToken(token);
+        JWTToken jwtToken = new JWTToken(EncryptUtil.aesDecrypt(token));
         //交给realm处理
         getSubject(request, response).login(jwtToken);
         //如果没有抛出异常，说明身份验证通过，否则会走异常处理

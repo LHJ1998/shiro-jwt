@@ -31,7 +31,7 @@ public class LoginController {
             if(dbUser.getPassword().equals(secret)){
                 Map<String, String> claims = new HashMap<>();
                 claims.put(JWTUtil.USERNAME_CLAIMS, dbUser.getUsername());
-                return ResponseBean.success("登录成功", JWTUtil.sign(claims, secret));
+                return ResponseBean.success("登录成功", EncryptUtil.aesEncrypt(JWTUtil.sign(claims, secret)));
             }
         }
         return ResponseBean.fail("用户名或密码错误");

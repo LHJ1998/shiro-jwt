@@ -16,9 +16,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * 过滤器处理流程
@@ -49,7 +46,6 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
     @Override
     protected boolean executeLogin(ServletRequest request, ServletResponse response) throws Exception {
         HttpServletRequest req = (HttpServletRequest) request;
-        System.out.println(req.getRequestURI() + " need authentication ...");
         String token = req.getHeader(AUTHORIZATION_HEADER);
         //封装为JWTToken
         JWTToken jwtToken = new JWTToken(EncryptUtil.aesDecrypt(token));

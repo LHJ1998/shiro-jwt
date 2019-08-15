@@ -2,6 +2,8 @@ package com.lhj.shiro.jwt.component;
 
 import com.lhj.shiro.jwt.pojo.User;
 import com.lhj.shiro.jwt.service.UserService;
+import com.lhj.shiro.jwt.utils.HttpContextUtil;
+import com.lhj.shiro.jwt.utils.IPUtil;
 import com.lhj.shiro.jwt.utils.JWTUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.*;
@@ -65,6 +67,7 @@ public class MyRealm extends AuthorizingRealm {
         }
         Map<String, String> claims = new HashMap<>();
         claims.put(JWTUtil.USERNAME_CLAIMS, username);
+        claims.put(JWTUtil.CLIENT_IP_ADDRESS_CLAIMS, IPUtil.getIpAddress(HttpContextUtil.getHttpServletRequest()));
         if(!JWTUtil.verify(token, claims, user.getPassword())) {
             log.error("error on authentication user with incorrect credentials: 【" + username + "】");
             throw new IncorrectCredentialsException("credentials error");

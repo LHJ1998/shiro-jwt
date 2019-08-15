@@ -18,6 +18,8 @@ public class JWTUtil {
 
     public static final String USERNAME_CLAIMS = "username";
 
+    public static final String CLIENT_IP_ADDRESS_CLAIMS = "clientIpAddress";
+
     /**
      * 生成token
      * @param claims    需要记录的字段
@@ -30,6 +32,7 @@ public class JWTUtil {
             Date date = new Date(System.currentTimeMillis() + expire);
             return JWT.create()
                     .withClaim(USERNAME_CLAIMS, claims.get(USERNAME_CLAIMS))
+                    .withClaim(CLIENT_IP_ADDRESS_CLAIMS, claims.get(CLIENT_IP_ADDRESS_CLAIMS))
                     .withExpiresAt(date)
                     .sign(Algorithm.HMAC256(secret));
         } catch (UnsupportedEncodingException e) {
@@ -54,6 +57,7 @@ public class JWTUtil {
         try{
             JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(secret))
                     .withClaim(USERNAME_CLAIMS, claims.get(USERNAME_CLAIMS))
+                    .withClaim(CLIENT_IP_ADDRESS_CLAIMS, claims.get(CLIENT_IP_ADDRESS_CLAIMS))
                     .build();
             DecodedJWT jwt = jwtVerifier.verify(token);
             return true;

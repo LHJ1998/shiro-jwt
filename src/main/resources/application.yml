@@ -32,7 +32,7 @@ spring:
         login-password: root
 
 shiro:
-  salt: aSBsb3ZlIHlvdQ==
+  secret: aSBsb3ZlIHlvdQ==
   iteration: 5
   anonUrl: /v1/api/user/login,/v1/api/user/register,/v1/api/401
 

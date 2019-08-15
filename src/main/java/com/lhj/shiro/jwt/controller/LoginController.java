@@ -37,18 +37,4 @@ public class LoginController {
         return ResponseBean.fail("用户名或密码错误");
     }
 
-    @PostMapping(value = "/register")
-    public ResponseBean<String> register(@RequestBody User user){
-        String salt = EncryptUtil.generateRandomNumber();
-        String secret = EncryptUtil.md5Encrypt(user.getPassword(), salt, iteration);
-        user.setPassword(secret);
-        user.setSalt(salt);
-        boolean success = userService.saveUser(user);
-        if(success){
-            return ResponseBean.success("注册成功");
-        }else{
-            return ResponseBean.fail("注册失败");
-        }
-    }
-
 }

@@ -34,7 +34,7 @@ spring:
 shiro:
   secret: aSBsb3ZlIHlvdQ==
   iteration: 5
-  anonUrl: /v1/api/user/login,/v1/api/user/register,/v1/api/401
+  anonUrl: /v1/api/login,/v1/api/register,/v1/api/401
 
 jwt:
   expire: 300000

@@ -1,0 +1,7 @@
+spring:
+  datasource:
+    #开发环境下开启日志打印输出
+    driver-class-name: com.p6spy.engine.spy.P6SpyDriver
+    url: jdbc:p6spy:mysql://localhost:3306/study?useSSL=false
+    username: root
+    password: root

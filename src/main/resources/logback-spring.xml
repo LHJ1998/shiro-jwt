@@ -6,7 +6,8 @@
     <!--应用名称-->
     <property name="APP_NAME" value="shiro-jwt"/>
     <!--日志文件保存路径-->
-    <property name="LOG_FILE_PATH" value="D:\\logs"/> <!-- ${LOG_FILE:-${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp}}}/logs} -->
+    <property name="LOG_FILE_PATH" value="logs"/> <!-- ${LOG_FILE:-${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp}}}/logs} -->
+<!--    <property name="FILE_LOG_PATTERN" value="%d{HH:mm:ss.SSS} [%thread] %-5level %logger{5} - %msg%n" />-->
     <contextName>${APP_NAME}</contextName>
     <!--每天记录日志到文件appender-->
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
@@ -25,9 +26,10 @@
         <encoder charset="UTF-8" class="net.logstash.logback.encoder.LogstashEncoder"/>
     </appender>
     -->
-    <root>
+    <!--日志输出级别-->
+    <root level="INFO">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="FILE"/>
-        <appender-ref ref="LOGSTASH"/>
+<!--        <appender-ref ref="LOGSTASH"/>-->
     </root>
 </configuration>

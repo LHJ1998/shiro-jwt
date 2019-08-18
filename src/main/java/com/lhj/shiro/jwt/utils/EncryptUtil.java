@@ -11,6 +11,10 @@ public class EncryptUtil {
 
     private static final String MD5_ALGORITHM = "md5";
 
+    private static final String DEFAULT_SALT = "";
+
+    private static final Integer DEFAULT_ITERATION = 5;
+
     private static final ShiroProperties SHIRO_PROPERTIES =
             SpringContextUtil.getBean(ShiroProperties.class);
 
@@ -20,6 +24,10 @@ public class EncryptUtil {
     public static String md5Encrypt(String secret, String salt, int iteration){
         SimpleHash hash = new SimpleHash(MD5_ALGORITHM, secret, salt, iteration);
         return hash.toString();
+    }
+
+    public static String md5Encrypt(String secret){
+        return md5Encrypt(secret, DEFAULT_SALT, DEFAULT_ITERATION);
     }
 
     public static String generateRandomNumber(){

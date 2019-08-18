@@ -5,3 +5,18 @@ spring:
     url: jdbc:p6spy:mysql://localhost:3306/study?useSSL=false
     username: root
     password: root
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    jedis:
+      pool:
+        #最小的存活连接数量（负值表示无限制）
+        min-idle: 8
+        #最大存活连接数量（负值表示无限制）
+        max-idle: 500
+        #最大活跃连接数量（负值表示无限制）
+        max-active: 2000
+        #最长等待时间（负值表示无限制）
+        max-wait: 10000
+    #超时时间（毫秒）
+    timeout: 1000

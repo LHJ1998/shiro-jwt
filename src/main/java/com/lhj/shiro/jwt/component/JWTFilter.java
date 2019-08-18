@@ -48,7 +48,7 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
         HttpServletRequest req = (HttpServletRequest) request;
         String token = req.getHeader(AUTHORIZATION_HEADER);
         //封装为JWTToken
-        JWTToken jwtToken = new JWTToken(EncryptUtil.aesDecrypt(token));
+        JWTToken jwtToken = new JWTToken(token);
         //交给realm处理
         getSubject(request, response).login(jwtToken);
         //如果没有抛出异常，说明身份验证通过，否则会走异常处理
@@ -67,10 +67,14 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
                 return true;
             }
         }
+        /**
+         * 废除的危险做法
+         * 如果用户在认证以后修改了token，那么下次操作的时候需要从token中获取用户信息的时候就会出现问题
+         */
         //已通过认证的，允许访问
-        if(getSubject(request, response).isAuthenticated()){
-            return true;
-        }
+//        if(getSubject(request, response).isAuthenticated()){
+//            return true;
+//        }
         if(isLoginAttempt(request, response)){
             try{
                 executeLogin(request, response);

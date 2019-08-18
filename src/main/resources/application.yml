@@ -31,6 +31,7 @@ spring:
     active: dev
 
 shiro:
+  #用于AES加密的凭证密钥
   secret: aSBsb3ZlIHlvdQ==
   iteration: 5
   anonUrl: /v1/api/login,/v1/api/user,/v1/api/401

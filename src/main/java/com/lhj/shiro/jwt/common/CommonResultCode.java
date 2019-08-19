@@ -26,4 +26,14 @@ public class CommonResultCode {
      */
     public static final Integer OPERATING_FAILED = 50061;
 
+    /**
+     * token过期失效
+     */
+    public static final Integer TOKEN_EXPIRED = 50067;
+
+    /**
+     * 身份验证失败
+     */
+    public static final Integer AUTHENTICATION_FAILED = 50070;
+
 }

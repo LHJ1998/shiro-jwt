@@ -1,8 +1,6 @@
 package com.lhj.shiro.jwt.component;
 
-import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.lhj.shiro.jwt.config.ShiroProperties;
-import com.lhj.shiro.jwt.utils.EncryptUtil;
 import com.lhj.shiro.jwt.utils.SpringContextUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -44,15 +42,20 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
     }
 
     @Override
-    protected boolean executeLogin(ServletRequest request, ServletResponse response) throws Exception {
+    protected boolean executeLogin(ServletRequest request, ServletResponse response) {
         HttpServletRequest req = (HttpServletRequest) request;
         String token = req.getHeader(AUTHORIZATION_HEADER);
         //封装为JWTToken
         JWTToken jwtToken = new JWTToken(token);
         //交给realm处理
-        getSubject(request, response).login(jwtToken);
+        try{
+            getSubject(request, response).login(jwtToken);
+            return true;
+        } catch (Exception e){
+            log.error("error on execute login, message: " + e.getMessage());
+            return false;
+        }
         //如果没有抛出异常，说明身份验证通过，否则会走异常处理
-        return true;
     }
 
     @Override
@@ -75,23 +78,13 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
 //        if(getSubject(request, response).isAuthenticated()){
 //            return true;
 //        }
-        if(isLoginAttempt(request, response)){
-            try{
-                executeLogin(request, response);
-                return true;
-            } catch (TokenExpiredException e){
-                e.printStackTrace();
-                log.error("token has expired !");
-                //身份验证出现问题，用户非法登录、token过期、token非法篡改
-                response401(request, response);
-            } catch (Exception e){
-                e.printStackTrace();
-                response401(request, response);
-            }
+        if(isLoginAttempt(request, response) && executeLogin(request, response)){
+            return true;
+        }else{
+            //未携带token或验证失败 禁止访问
+            response401(request, response);
+            return false;
         }
-        //未携带token 禁止访问
-        response401(request, response);
-        return false;
     }
 
     /**

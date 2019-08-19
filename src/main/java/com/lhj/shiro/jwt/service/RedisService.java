@@ -59,7 +59,7 @@ public class RedisService {
 
     public boolean del(String key){
         try{
-            redisTemplate.opsForValue().getOperations().delete(key);
+            redisTemplate.delete(key);
             return true;
         }catch (Exception e){
             e.printStackTrace();

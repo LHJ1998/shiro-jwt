@@ -47,7 +47,7 @@ public class UserController {
 
     @GetMapping(value = "/outline")
     public ResponseBean<String> outline(HttpServletRequest request){
-        String token = EncryptUtil.aesDecrypt(request.getHeader("Authorization"));
+        String token = request.getHeader("Authorization");
         String key = IPUtil.getIpAddress(request) + "-" + EncryptUtil.md5Encrypt(token);
         redisService.del(key);
         return ResponseBean.success("outline !!!");
